@@ -3,3 +3,5 @@ python:
   - "3.8.1"
 install:
   - pip install -r requirements.txt
+script:
+  - python -m unittest discover -s "./tests/unit/" -p "test_*.py"
