@@ -48,12 +48,31 @@ set_father - params: <Member> father
 set_spouse - params: <Member> spouse
 add_child - params: <Member> child
 
-get_paternal_aunt - params: None
-get_paternal_uncle - params: None
-get_maternal_aunt - params: None
-get_maternal_uncle - params: None
-get_brother_in_law - params: None
-get_sister_in_law - params: None
+get_paternal_grandmother - params: None
+get_maternal_grandmother - params: None
+get_spouse_mother - params: None
+
+get_paternal_aunt - params: None -> self.father.mother.children.filter(female)
+    - grandmother is None - []
+    - grandmother is valid, but only one child, your father - []
+    - grandmother is valid, multiple children, but no girls only boys - []
+    - grandmother is valid, multiple children, girls and boys - [girls]
+
+get_paternal_uncle - params: None -> self.father.mother.children.filter(male)
+    - grandmother is None - []
+    - grandmother is valid, but only one child, your father - []
+    - grandmother is valid, multiple children, but all girls and our father - []
+    - grandmother is valid, multiple children, both boys and girls - [boys, father is not included]
+
+get_maternal_aunt - params: None -> self.mother.mother.children.filter(female)
+get_maternal_uncle - params: None -> self.mother.mother.children.filter(male)
+get_brother_in_law - params: None -> self.spouse.mother.children.filter(male)
+    - spouse mother is None - []
+    - spouse mother is valid, but only one child, our spouse - []
+    - spouse mother is valid, multiple children, all girls and our spouse- []
+    - spouse mother is valid, multiple children, boys and girls - []
+
+get_sister_in_law - params: None -> self.spouse.mother.children.filter(female)
 get_son - params: None
 get_daughter - params: None
 get_siblings - params: None
