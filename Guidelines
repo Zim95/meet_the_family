@@ -1,0 +1,23 @@
+Geektrust
+==========
+data_member:
+------------
+family_tree: FamilyTree()
+
+
+methods:
+---------
+construct_add_child_method_call - params: String name, String gender, String mother_name
+construct_add_spouse_method_call - params: String name, String gender, String spouse_name
+construct_get_relationship_method_call - params: String name, String relationship_type
+translate - params: String filename
+    - read lines from filename
+    - return a list of commands in strings
+execute - params: List commands
+    - eval each command and store the result
+    - return result
+log - params: List result
+    - print the results in console
+setup - params: None
+    - call translate with setup file
+    - execute the results
