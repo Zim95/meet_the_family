@@ -66,6 +66,7 @@ get_paternal_uncle - params: None -> self.father.mother.children.filter(male)
 
 get_maternal_aunt - params: None -> self.mother.mother.children.filter(female)
 get_maternal_uncle - params: None -> self.mother.mother.children.filter(male)
+
 get_brother_in_law - params: None -> self.spouse.mother.children.filter(male)
     - spouse mother is None - []
     - spouse mother is valid, but only one child, our spouse - []
@@ -96,6 +97,8 @@ add_child - params: String name, String gender, String mother_name
         - add member
         - return CHILD_ADDITION_SUCCEEDED
     - if family_tree is not empty
+        - if member already exists
+            - return CHILD_ADDITION_FAILED
         - mother should be a valid entity
         - if not mother:
             - return PERSON_NOT_FOUND
@@ -108,6 +111,51 @@ add_child - params: String name, String gender, String mother_name
             - add_child for mother and father
             - set_mother for member
             - set_father for member
+            - create an entry for member
+            - return CHILD_ADDITION_SUCCEEDED
 
 add_spouse - params: String name, String gender, String spouse_name
+    - create member
+    - if family_tree is empty
+        - return SPOUSE_ADDITION_FAILED
+    - if family_tree is not empty
+        - if member already exists
+            - return SPOUSE_ADDITION_FAILED
+        - spouse should be a valid entity
+        - if not spouse:
+            - return PERSON_NOT_FOUND
+        - if spouse.gender == member.gender:
+            - return SPOUSE_ADDITION_FAILED
+        - if spouse is already married:
+            - return SPOUSE_ADDITION_FAILED
+        - if all conditions match
+            - set_spouse for member
+            - set_spouse for spouse
+            - create an entry for spouse
+            - return SPOUSE_ADDITION_SUCCEDED
+
 get_relationship - params: String name, String relationship_type
+    - if not member:
+        - return PERSON_NOT_FOUND
+    result = member.get_relationship()
+
+    - if not result:
+        - return NONE
+    - else:
+        - return ' '.join(sort_based_on_id(result))
+
+Geektrust
+============================
+data_members:
+-------------
+family_tree : FamilyTree()
+
+methods:
+---------
+construct_add_child_method_string - params: String name, String gender, String mother_name
+construct_add_spouse_method_string - params: String name, String gender, String mother_name
+construct_get_relationship_method_string - params: String name, String relationship_type
+translate - params: String filename
+execute - params: List instructions
+log - params: List results
+setup - params: String filename
