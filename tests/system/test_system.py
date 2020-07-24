@@ -12,7 +12,7 @@ class TestSystem(TestCase):
     def test_system(self, mock_log):
         self.geektrust_app.main("./instructions.txt")
         mock_log.assert_called_with(
-            '\n'.join([
+            [
                 "CHILD_ADDITION_SUCCEEDED",
                 "Aria",
                 "Jnki Ahit",
@@ -21,5 +21,5 @@ class TestSystem(TestCase):
                 "CHILD_ADDITION_FAILED",
                 "NONE",
                 "Satvy Krpi"
-            ])
+            ]
         )

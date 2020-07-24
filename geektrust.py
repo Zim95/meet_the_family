@@ -1,3 +1,4 @@
+import sys
 from family_tree.family_tree import FamilyTree
 
 
@@ -93,8 +94,10 @@ class Geektrust:
         self.setup('./setup.instructions.txt')
         commands = self.translate(filename)
         results = self.execute(commands)
-        self.log('\n'.join(results))
+        self.log(results)
 
 
 if __name__ == "__main__":
-    print("Hello Geektrust")
+    geektrust = Geektrust()
+    filename = sys.argv[1]
+    geektrust.main(filename)
