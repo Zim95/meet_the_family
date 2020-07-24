@@ -1,9 +1,14 @@
+FamilyTree
+    - add_child -> return 'CHILD_ADDITION_SUCCEDED'
+    - add_spouse -> return 'SPOUSE_ADDITION_SUCCEDED'
+    - get_relationship -> return 'N R'
+
+
 Geektrust
 ==========
 data_member:
 ------------
 family_tree: FamilyTree()
-
 
 methods:
 ---------
@@ -13,6 +18,12 @@ construct_get_relationship_method_call - params: String name, String relationshi
 translate - params: String filename
     - read lines from filename
     - return a list of commands in strings
+
+    CONVERT: 
+        - ADD_CHILD Mother Name Gender => 'self.family_tree.add_child("Name", "Gender", "Mother")'
+        - ADD_SPOUSE Spouse Name Gender => 'self.family_tree.add_spouse(name, gender, spouse)'
+        - GET_RELATIONSHIP Name Relationship => 'self.family_tree.get_relationship(name, relationship_type)'
+
 execute - params: List commands
     - eval each command and store the result
     - return result
