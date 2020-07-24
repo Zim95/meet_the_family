@@ -72,6 +72,9 @@ class FamilyTree:
         else:
             return ' '.join(
                 list(
-                    map(lambda x: x.name, sorted(result, key=lambda key: key.id))
+                    map(
+                        lambda x: x.name,
+                        sorted(result, key=lambda key: key.id)
+                    )
                 )
             )

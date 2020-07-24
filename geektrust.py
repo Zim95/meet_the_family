@@ -5,7 +5,6 @@ class Geektrust:
 
     def __init__(self):
         self.family_tree = FamilyTree()
-        self.setup('./setup.instructions.txt')
 
     def construct_add_child_method_call(self, *args):
         if len(args) > 3 or len(args) < 2:
@@ -91,6 +90,7 @@ class Geektrust:
         self.execute(commands)
 
     def main(self, filename):
+        self.setup('./setup.instructions.txt')
         commands = self.translate(filename)
         results = self.execute(commands)
         self.log('\n'.join(results))

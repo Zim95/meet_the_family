@@ -46,7 +46,7 @@ class Member:
                 'Spouse and member cannot have the same gender.'
             )
         self.spouse = spouse
-    
+
     def add_child(self, child):
         if not isinstance(child, Member):
             raise ValueError('Invalid value for child')
@@ -65,7 +65,7 @@ class Member:
         if not self.mother.mother:
             return None
         return self.mother.mother
-    
+
     def get_spouse_mother(self):
         if not self.spouse:
             return None
@@ -85,7 +85,7 @@ class Member:
                 grandmother.children
             )
         )
-    
+
     def get_paternal_uncle(self):
         grandmother = self.get_paternal_grandmother()
         if not grandmother:
@@ -94,7 +94,8 @@ class Member:
             return []
         return list(
             filter(
-                lambda x: x.gender == Gender.male and x.name != self.father.name,
+                lambda x: x.gender == Gender.male and
+                x.name != self.father.name,
                 grandmother.children
             )
         )
@@ -107,7 +108,8 @@ class Member:
             return []
         return list(
             filter(
-                lambda x: x.gender == Gender.female and x.name != self.mother.name,
+                lambda x: x.gender == Gender.female and
+                x.name != self.mother.name,
                 grandmother.children
             )
         )
@@ -125,31 +127,39 @@ class Member:
             )
         )
 
-    def get_brother_in_law(self):
-        spouse_mother = self.get_spouse_mother()
-        if not spouse_mother:
+    def get_sibling_spouses(self):
+        siblings = self.get_siblings()
+        if not siblings:
             return []
-        if not spouse_mother.children:
+        sibling_spouses = [
+            sibling.spouse for sibling in siblings if sibling.spouse
+        ]
+        return sibling_spouses
+
+    def get_spouse_siblings(self):
+        if not self.spouse:
+            return []
+        return self.spouse.get_siblings()
+
+    def get_brother_in_law(self):
+        results = self.get_sibling_spouses() + self.get_spouse_siblings()
+        if not results:
             return []
         return list(
             filter(
-                lambda x: x.gender == Gender.male and \
-                    x.name != self.spouse.name,
-                spouse_mother.children
+                lambda x: x.gender == Gender.male,
+                results
             )
         )
 
     def get_sister_in_law(self):
-        spouse_mother = self.get_spouse_mother()
-        if not spouse_mother:
-            return []
-        if not spouse_mother.children:
+        results = self.get_sibling_spouses() + self.get_spouse_siblings()
+        if not results:
             return []
         return list(
             filter(
-                lambda x: x.gender == Gender.female and \
-                    x.name != self.spouse.name,
-                spouse_mother.children
+                lambda x: x.gender == Gender.female,
+                results
             )
         )
 
@@ -198,7 +208,8 @@ class Member:
             'siblings': self.get_siblings
         }
 
-        relationship_method = relationship_method_switch.get(relationship_type, None)
+        relationship_method = relationship_method_switch.get(
+            relationship_type, None)
 
         if relationship_method:
             return relationship_method()
