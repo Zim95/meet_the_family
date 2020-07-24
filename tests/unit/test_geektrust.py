@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch, mock_open, MagicMock
 from geektrust import Geektrust
-
+from family_tree import constants
 
 class TestGeektrust(TestCase):
 
@@ -58,9 +58,9 @@ class TestGeektrust(TestCase):
                 ]
             )
 
-    @patch('geektrust.FamilyTree.get_relationship', return_value="NONE")
-    @patch('geektrust.FamilyTree.add_spouse', return_value="SPOUSE_ADDITION_SUCCEDED")
-    @patch('geektrust.FamilyTree.add_child', return_value="CHILD_ADDITION_SUCCEDED")
+    @patch('geektrust.FamilyTree.get_relationship', return_value=constants.NONE)
+    @patch('geektrust.FamilyTree.add_spouse', return_value=constants.SPOUSE_ADDITION_SUCCEEDED)
+    @patch('geektrust.FamilyTree.add_child', return_value=constants.CHILD_ADDITION_SUCCEEDED)
     def test_execute(self, mock_add_child, mock_add_spouse,
                      mock_get_relationship):
         results = self.geektrust_app.execute(
@@ -70,15 +70,15 @@ class TestGeektrust(TestCase):
                 'self.family_tree.get_relationship("Member", "brother_in_law")'
             ]
         )
-        self.assertEqual(results, ["CHILD_ADDITION_SUCCEDED", "SPOUSE_ADDITION_SUCCEDED", "NONE"])
+        self.assertEqual(results, [constants.CHILD_ADDITION_SUCCEEDED, constants.SPOUSE_ADDITION_SUCCEEDED, constants.NONE])
         mock_add_child.assert_called_with("Member", "Male", "Mother")
         mock_add_spouse.assert_called_with("Wife", "Female", "Spouse")
         mock_get_relationship.assert_called_with("Member", "brother_in_law")
 
     @patch('builtins.print')
     def test_log(self, mock_print):
-        self.geektrust_app.log(["CHILD_ADDITION_SUCCEDED", "SPOUSE_ADDITION_SUCCEDED", "NONE"])
-        mock_print.assert_called_with("NONE")
+        self.geektrust_app.log([constants.CHILD_ADDITION_SUCCEEDED, constants.SPOUSE_ADDITION_SUCCEEDED, constants.NONE])
+        mock_print.assert_called_with(constants.NONE)
 
     @patch('geektrust.Geektrust.execute')
     @patch('geektrust.Geektrust.translate', return_value=['RESULT'])

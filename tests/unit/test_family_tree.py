@@ -3,6 +3,7 @@ from unittest.mock import patch, Mock
 
 from family_tree.family_tree import FamilyTree
 from family_tree.member import Member, Gender
+from family_tree import constants
 from tests.unit import create_fake_member
 
 
@@ -25,24 +26,24 @@ class TestFamilyTree(TestCase):
             isinstance(self.ftree.family_tree.get("Zim", None), Mock),
             True
         )
-        self.assertEqual(result, 'CHILD_ADDITION_SUCCEDED')
+        self.assertEqual(result, constants.CHILD_ADDITION_SUCCEEDED)
 
         # if either mother/ father do not exist
         mother = create_fake_member(id=2, name="Mother", gender=Gender.female)
         fakemother = create_fake_member(id=4, name="Fakemother", gender=Gender.male)
         father = create_fake_member(id=3, name="Father", gender=Gender.male)
         
-        self.assertEqual(self.ftree.add_child("Zim2", "Male", "Mother"), "PERSON_NOT_FOUND")
+        self.assertEqual(self.ftree.add_child("Zim2", "Male", "Mother"), constants.PERSON_NOT_FOUND)
         self.ftree.family_tree['Fakemother'] = fakemother
-        self.assertEqual(self.ftree.add_child("Zim2", "Male", "Fakemother"), "CHILD_ADDITION_FAILED")
+        self.assertEqual(self.ftree.add_child("Zim2", "Male", "Fakemother"), constants.CHILD_ADDITION_FAILED)
         self.ftree.family_tree['Mother'] = mother
-        self.assertEqual(self.ftree.add_child("Zim2", "Male", "Mother"), "CHILD_ADDITION_FAILED")
+        self.assertEqual(self.ftree.add_child("Zim2", "Male", "Mother"), constants.CHILD_ADDITION_FAILED)
         self.ftree.family_tree['Father'] = father
         self.ftree.family_tree['Mother'].spouse = father
         self.ftree.family_tree['Father'].spouse = mother
 
-        self.assertEqual(self.ftree.add_child("Zim2", "Male", "Mother"), "CHILD_ADDITION_SUCCEDED")
-        self.assertEqual(self.ftree.add_child("Zim2", "Male", "Mother"), "CHILD_ADDITION_FAILED")
+        self.assertEqual(self.ftree.add_child("Zim2", "Male", "Mother"), constants.CHILD_ADDITION_SUCCEEDED)
+        self.assertEqual(self.ftree.add_child("Zim2", "Male", "Mother"), constants.CHILD_ADDITION_FAILED)
         self.assertEqual(isinstance(self.ftree.family_tree.get("Zim2", None), Mock), True)
 
     @patch('family_tree.family_tree.Member', return_value=create_fake_member(
@@ -56,7 +57,7 @@ class TestFamilyTree(TestCase):
             self.ftree.family_tree.get("Zim", None),
             None
         )
-        self.assertEqual(result, 'SPOUSE_ADDITION_FAILED')
+        self.assertEqual(result, constants.SPOUSE_ADDITION_FAILED)
 
         # if spouse does not exist
         dummy_member = create_fake_member(id=0, name="DummyMember", gender=Gender.male)
@@ -65,22 +66,22 @@ class TestFamilyTree(TestCase):
         spouse_b = create_fake_member(id=3, name="FakeMember", gender=Gender.female)
         spouse_c = create_fake_member(id=3, name="MarriedMember", gender=Gender.male, spouse=spouse_b)
 
-        self.assertEqual(self.ftree.add_spouse("Wife", Gender.female, "Zim"), "PERSON_NOT_FOUND")
+        self.assertEqual(self.ftree.add_spouse("Wife", Gender.female, "Zim"), constants.PERSON_NOT_FOUND)
         self.ftree.family_tree["Zim"] = spouse_a
         self.ftree.family_tree["FakeMember"] = spouse_b
         self.ftree.family_tree["MarriedMember"] = spouse_c
 
-        self.assertEqual(self.ftree.add_spouse("Wife", Gender.female, "FakeMember"), "SPOUSE_ADDITION_FAILED")
-        self.assertEqual(self.ftree.add_spouse("Wife", Gender.female, "MarriedMember"), "SPOUSE_ADDITION_FAILED")
-        self.assertEqual(self.ftree.add_spouse("Wife", Gender.female, "Zim"), "SPOUSE_ADDITION_SUCCEDED")
-        self.assertEqual(self.ftree.add_spouse("Wife", Gender.female, "Zim"), "SPOUSE_ADDITION_FAILED")
+        self.assertEqual(self.ftree.add_spouse("Wife", Gender.female, "FakeMember"), constants.SPOUSE_ADDITION_FAILED)
+        self.assertEqual(self.ftree.add_spouse("Wife", Gender.female, "MarriedMember"), constants.SPOUSE_ADDITION_FAILED)
+        self.assertEqual(self.ftree.add_spouse("Wife", Gender.female, "Zim"), constants.SPOUSE_ADDITION_SUCCEEDED)
+        self.assertEqual(self.ftree.add_spouse("Wife", Gender.female, "Zim"), constants.SPOUSE_ADDITION_FAILED)
 
     @patch('family_tree.family_tree.Member.get_relationship', side_effect=[
         [],
         [create_fake_member(id=1, name="Zim"), create_fake_member(id=2, name="Wife")]
     ])
     def test_get_relationship(self, mock_get_relationship):
-        self.assertEqual(self.ftree.get_relationship("Zim", "brother_in_law"), "PERSON_NOT_FOUND")
+        self.assertEqual(self.ftree.get_relationship("Zim", "brother_in_law"), constants.PERSON_NOT_FOUND)
         self.ftree.family_tree["Zim"] = Member(1, "Zim", "Male")
-        self.assertEqual(self.ftree.get_relationship("Zim", "brother_in_law"), "NONE")
-        self.assertEqual(self.ftree.get_relationship("Zim", "brother_in_law"), ["Zim", "Wife"])
+        self.assertEqual(self.ftree.get_relationship("Zim", "brother_in_law"), constants.NONE)
+        self.assertEqual(self.ftree.get_relationship("Zim", "brother_in_law"), "Zim Wife")

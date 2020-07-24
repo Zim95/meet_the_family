@@ -19,13 +19,13 @@ ADD_CHILD Chitra Ahit Male
 ADD_CHILD Satya Asva Male
 ADD_CHILD Satya Vyas Male
 ADD_CHILD Satya Atya Female
-ADD_SPOUSE Jaya Male
-ADD_SPOUSE Arit Male
-ADD_SPOUSE Satvy Female
-ADD_SPOUSE Krpi Femle
-ADD_CHILD Yodhan Male
-ADD_CHILD Laki Male
-ADD_CHILD Lavnya Female
-ADD_CHILD Vasa Male
-ADD_CHILD Kriya Male
-ADD_CHILD Krithi Female
+ADD_SPOUSE Dritha Jaya Male
+ADD_SPOUSE Jnki Arit Male
+ADD_SPOUSE Asva Satvy Female
+ADD_SPOUSE Vyas Krpi Female
+ADD_CHILD Dritha Yodhan Male
+ADD_CHILD Jnki Laki Male
+ADD_CHILD Jnki Lavnya Female
+ADD_CHILD Satvy Vasa Male
+ADD_CHILD Krpi Kriya Male
+ADD_CHILD Krpi Krithi Female
