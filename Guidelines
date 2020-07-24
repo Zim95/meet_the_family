@@ -145,17 +145,30 @@ get_relationship - params: String name, String relationship_type
         - return ' '.join(sort_based_on_id(result))
 
 Geektrust
-============================
-data_members:
--------------
-family_tree : FamilyTree()
+==========
+data_member:
+------------
+family_tree: FamilyTree()
 
 methods:
 ---------
-construct_add_child_method_string - params: String name, String gender, String mother_name
-construct_add_spouse_method_string - params: String name, String gender, String mother_name
-construct_get_relationship_method_string - params: String name, String relationship_type
+construct_add_child_method_call - params: String name, String gender, String mother_name
+construct_add_spouse_method_call - params: String name, String gender, String spouse_name
+construct_get_relationship_method_call - params: String name, String relationship_type
 translate - params: String filename
-execute - params: List instructions
-log - params: List results
-setup - params: String filename
+    - read lines from filename
+    - return a list of commands in strings
+
+    CONVERT: 
+        - ADD_CHILD Mother Name Gender => 'self.family_tree.add_child("Name", "Gender", "Mother")'
+        - ADD_SPOUSE Spouse Name Gender => 'self.family_tree.add_spouse(name, gender, spouse)'
+        - GET_RELATIONSHIP Name Relationship => 'self.family_tree.get_relationship(name, relationship_type)'
+
+execute - params: List commands
+    - eval each command and store the result
+    - return result
+log - params: List result
+    - print the results in console
+setup - params: None
+    - call translate with setup file
+    - execute the results
